@@ -43,13 +43,17 @@ if ! [ -f /home/$ADMIN_USERNAME/.ssh/id_rsa ]; then
     sudo -u $ADMIN_USERNAME sh -c "ssh-keygen -f /home/$ADMIN_USERNAME/.ssh/id_rsa -t rsa -N ''"
 fi
 
+sudo apt-get update >> /tmp/azuredeploy.log.$$ 2>&1
+apt-cache search sshpass >> /tmp/azuredeploy.log.$$ 2>&1
+sudo add-apt-repository universe >> /tmp/azuredeploy.log.$$ 2>&1
+
 # Install sshpass to automate ssh-copy-id action
 sudo apt-get install sshpass -y >> /tmp/azuredeploy.log.$$ 2>&1
 RC1=$?
-echo "just executed apt-get with return code $RC1"
-sudo apt-get install sshpass -y >> /tmp/azuredeploy.log.$$ 2>&1
-RC2=$?
-echo "just executed apt-get with return code $RC2"
+echo "just executed apt-get with return code $RC1" >> /tmp/azuredeploy.log.$$ 2>&1
+#sudo apt-get install sshpass -y >> /tmp/azuredeploy.log.$$ 2>&1
+#RC2=$?
+#echo "just executed apt-get with return code $RC2" >> /tmp/azuredeploy.log.$$ 2>&1
 # Loop through all worker nodes, update hosts file and copy ssh public key to it
 # The script make the assumption that the node is called %WORKER+<index> and have
 # static IP in sequence order
